@@ -100,49 +100,48 @@ class CreditServiceTest {
         //then
         Assertions.assertThatExceptionOfType(BusinessException::class.java)
                 .isThrownBy { creditService.findByCreditCode(id, fakeCreditCode) }
-                .withMessage("Credit Code $fakeCreditCode not found!")
+                .withMessage("Creditcode $fakeCreditCode not found")
         verify(exactly = 1) {creditRepository.findByCreditCode(fakeCreditCode)}
     }
 
-
     private fun buildCustomer(
-            firstName: String = "Henrique",
-            lastName: String = "Pedro",
-            cpf: String = "573.310.710-33",
-            email: String = "simba@simba.com",
-            password: String = "123123",
-            zipCode: String = "88302500",
-            street: String = "Rua da Selva",
-            income: BigDecimal = BigDecimal.valueOf(1000.0),
-            id: Long = 1L
+        firstName: String = "Henrique",
+        lastName: String = "Pedro",
+        cpf: String = "573.310.710-33",
+        email: String = "simba@simba.com",
+        password: String = "123123",
+        zipCode: String = "88302500",
+        street: String = "Rua da Selva",
+        income: BigDecimal = BigDecimal.valueOf(1000.0),
+        id: Long = 1L
     ) = Customer(
-            firstName = firstName,
-            lastName = lastName,
-            cpf = cpf,
-            email = email,
-            password = password,
-            address = Address(
-                    zipCode = zipCode,
-                    street = street
-            ),
-            income = income,
-            id = id
+        firstName = firstName,
+        lastName = lastName,
+        cpf = cpf,
+        email = email,
+        password = password,
+        address = Address(
+            zipCode = zipCode,
+            street = street
+        ),
+        income = income,
+        id = id
     )
     private fun buildCredit(
-            creditCode: UUID = UUID.fromString("14160cff-1c90-424d-a532-c2df6f02d25c"),
-            creditValue: BigDecimal = BigDecimal.valueOf(1500.0),
-            dayFirstInstallment: LocalDate = LocalDate.of(2024, 3, 12),
-            numberOfInstallments: Int = 6,
-            status: Status = Status.IN_PROGRESS,
-            customer: Customer = buildCustomer(),
-            id: Long = 1L
+        creditCode: UUID = UUID.fromString("14160cff-1c90-424d-a532-c2df6f02d25c"),
+        creditValue: BigDecimal = BigDecimal.valueOf(1500.0),
+        dayFirstOfInstallment: LocalDate = LocalDate.of(2024, 3, 12),
+        numberOfInstallments: Int = 6,
+        status: Status = Status.IN_PROGRESS,
+        customer: Customer = buildCustomer(),
+        id: Long = 1L
     ) = Credit(
-            creditCode = creditCode,
-            creditValue = creditValue,
-            dayFirstInstallment = dayFirstInstallment,
-            numberOfInstallments = numberOfInstallments,
-            status = status,
-            customer = customer,
-            id = id
+        creditCode = creditCode,
+        creditValue = creditValue,
+        dayFirstOfInstallment = dayFirstOfInstallment,
+        numberOfInstallments = numberOfInstallments,
+        status = status,
+        customer = customer,
+        id = id
     )
 }
