@@ -53,9 +53,13 @@ class CreditResourceTest {
 
     @BeforeEach
     fun setup() = creditRepository.deleteAll()
+    @BeforeEach
+    fun setup2() = customerRepository.deleteAll()
 
     @AfterEach
     fun tearDown() = creditRepository.deleteAll()
+    @AfterEach
+    fun tearDown2() = customerRepository.deleteAll()
 
     @Test
     fun `should create a credit and return 201 status`() {
