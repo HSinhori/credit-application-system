@@ -104,6 +104,51 @@ class CreditResourceTest {
 
     }
 
+    @Test
+    fun `should find by creditCode and return 200 status`() {
+        val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
+        val credit: Credit = creditRepository.save(builderCreditDto(customerId = customer.id!!).toEntity())
+
+        //when
+        //then
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("$URL/${credit.creditCode}?customerId=${customer.id}")
+                    .accept(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.creditCode").value("${credit.creditCode}"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.creditValue").value(1500.00))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.dayFirstOfInstallment").value("2024-03-12"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfInstallments").value(6))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("IN_PROGRESS"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.emailCustomer").value("simba@simba.com"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.incomeCustomer").value(1000.00))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    fun `should not find by creditCode and return 400 status`() {
+        val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
+        val credit: Credit = creditRepository.save(builderCreditDto(customerId = customer.id!!).toEntity())
+        val fakeId: Long = Random().nextLong()
+
+        //when
+        //then
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("$URL/${credit.creditCode}?customerId=$fakeId")
+                    .accept(MediaType.APPLICATION_JSON)
+        )
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title")
+                    .value("Bad Request! Consult the documentation"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.exception")
+                    .value("class java.lang.IllegalArgumentException"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
+            .andDo(MockMvcResultHandlers.print())
+    }
+
     private fun builderCustomerDto(
         firstName: String = "Henrique",
         lastName: String = "Pedro",
